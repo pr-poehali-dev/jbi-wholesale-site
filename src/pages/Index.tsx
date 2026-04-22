@@ -1,114 +1,84 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-const HERO_IMAGE = "https://cdn.poehali.dev/projects/659896a1-37d8-4894-b236-acb4401acb80/files/fe3133fe-4be1-4241-8816-07326368c6ca.jpg";
+const HERO_IMAGE = "https://cdn.poehali.dev/projects/659896a1-37d8-4894-b236-acb4401acb80/files/c6096512-a648-4592-8bf1-f09cd1a14ed6.jpg";
 
 const NAV_ITEMS = [
   { id: "home", label: "Главная" },
-  { id: "catalog", label: "Каталог" },
-  { id: "about", label: "О компании" },
-  { id: "delivery", label: "Доставка" },
-  { id: "price", label: "Прайс" },
-  { id: "blog", label: "Блог" },
+  { id: "products", label: "Продукция" },
+  { id: "docs", label: "Документы" },
+  { id: "services", label: "Услуги" },
+  { id: "about", label: "О заводе" },
+  { id: "promo", label: "Акции %" },
   { id: "contacts", label: "Контакты" },
 ];
 
-const CATALOG_ITEMS = [
+const PRODUCT_CATEGORIES = [
   {
-    id: 1,
-    name: "Трубопроводная арматура",
-    category: "Трубопроводы",
-    article: "ТА-2400",
-    gost: "ГОСТ 5762-2002",
-    docs: ["Паспорт качества", "Сертификат соответствия", "Техническое описание"],
-    badge: "Хит продаж",
+    title: "Кольца и колодцы",
+    icon: "Circle",
+    items: ["Кольца стеновые КС", "Водосточные колодцы", "Крышки колодцев", "Плиты днища ПД", "Плиты перекрытия", "Кабельные колодцы ККС", "Люки чугунные"],
   },
   {
-    id: 2,
-    name: "Промышленные фланцы",
-    category: "Соединения",
-    article: "ФП-1200",
-    gost: "ГОСТ 33259-2015",
-    docs: ["Паспорт качества", "Сертификат ИСО", "Чертёж"],
-    badge: null,
+    title: "Инженерные сети",
+    icon: "Network",
+    items: ["Каналы и тоннели 3.006.1-8", "Лотки Л и ЛП", "Балки серии Б", "Плиты каналов", "Коллекторы РК", "Опорные подушки"],
   },
   {
-    id: 3,
-    name: "Шаровые краны DN50–DN300",
-    category: "Арматура",
-    article: "ШК-8800",
-    gost: "ГОСТ Р 54808-2011",
-    docs: ["Паспорт качества", "Протокол испытаний", "Сертификат соответствия"],
-    badge: "Под заказ",
+    title: "Дорожное строительство",
+    icon: "Construction",
+    items: ["Плиты дорожные ПД", "Изделия для ж/д", "Блоки упора У", "Блоки бортовые", "Плиты аэродромные"],
   },
   {
-    id: 4,
-    name: "Задвижки клиновые",
-    category: "Запорная арматура",
-    article: "ЗК-5500",
-    gost: "ГОСТ 5762-2002",
-    docs: ["Паспорт качества", "Сертификат соответствия"],
-    badge: null,
+    title: "Фундаменты и стены",
+    icon: "Building2",
+    items: ["Фундаментные блоки ФБС", "Перемычки ПБ", "Блоки стеновые", "Плиты перекрытий ПК", "Сваи забивные"],
   },
   {
-    id: 5,
-    name: "Металлопрокат листовой",
-    category: "Металлопрокат",
-    article: "МЛ-3300",
-    gost: "ГОСТ 19903-2015",
-    docs: ["Сертификат качества", "Паспорт металла", "Протокол испытаний"],
-    badge: "Склад",
+    title: "Для водоснабжения",
+    icon: "Droplets",
+    items: ["Трубы безнапорные", "Трубы железобетонные", "Муфты и раструбы", "Оголовки труб"],
   },
   {
-    id: 6,
-    name: "Насосные агрегаты",
-    category: "Насосы",
-    article: "НА-7700",
-    gost: "ГОСТ Р 53403-2009",
-    docs: ["Паспорт оборудования", "Сертификат ТР ТС", "Техпаспорт"],
-    badge: null,
+    title: "Прочие изделия",
+    icon: "Package",
+    items: ["Лестницы и стремянки", "Опорные плиты", "Блоки заборные", "Элементы ограждений", "Изделия на заказ"],
   },
 ];
 
 const STATS = [
-  { value: "23", unit: "года", label: "на рынке" },
-  { value: "4 800+", unit: "позиций", label: "в каталоге" },
-  { value: "2 600+", unit: "клиентов", label: "по всей России" },
-  { value: "48 ч", unit: "", label: "среднее время отгрузки" },
+  { value: "25+", label: "лет на рынке" },
+  { value: "500+", label: "наименований" },
+  { value: "1000+", label: "клиентов" },
+  { value: "48 ч", label: "срок отгрузки" },
 ];
 
-const BLOG_POSTS = [
-  {
-    date: "14 апр 2026",
-    tag: "Нормативы",
-    title: "Изменения в ГОСТ 5762-2002: что важно знать оптовикам",
-    excerpt: "В 2026 году вступили в силу новые требования к маркировке трубопроводной арматуры...",
-  },
-  {
-    date: "02 апр 2026",
-    tag: "Логистика",
-    title: "Доставка на Север: особенности работы в условиях Крайнего Севера",
-    excerpt: "Рассказываем, как мы организуем поставки на объекты в арктической зоне без срывов сроков...",
-  },
-  {
-    date: "21 мар 2026",
-    tag: "Производство",
-    title: "Как выбрать шаровой кран для высокотемпературных сред",
-    excerpt: "Разбираем ключевые параметры при выборе арматуры для трубопроводов с температурой выше 250°C...",
-  },
+const SERVICES = [
+  { icon: "Truck", title: "Доставка по региону", desc: "Собственный автопарк спецтехники. Доставляем любые объёмы в удобное время." },
+  { icon: "Crane", title: "Погрузка кранами", desc: "Автокраны и погрузчики для крупногабаритных изделий. Работаем на объектах." },
+  { icon: "ClipboardList", title: "Изделия на заказ", desc: "Изготовим нестандартные ЖБИ по вашим чертежам и техническим условиям." },
+  { icon: "Headphones", title: "Техническая поддержка", desc: "Консультации по подбору изделий для проектов любой сложности." },
 ];
 
-const DELIVERY_ZONES = [
-  { name: "Москва и МО", time: "1–2 дня", type: "Собственный транспорт" },
-  { name: "ЦФО", time: "2–4 дня", type: "Транспортные компании" },
-  { name: "Россия", time: "3–14 дней", type: "Все ТК / ж/д" },
-  { name: "Экспорт (СНГ)", time: "по договору", type: "Международная логистика" },
+const DOCS = [
+  { name: "Сертификат соответствия ГОСТ 8020-2016", type: "PDF", size: "1.2 МБ" },
+  { name: "Декларация о соответствии ТР ТС 014/2011", type: "PDF", size: "0.8 МБ" },
+  { name: "Свидетельство о регистрации ИСО 9001:2015", type: "PDF", size: "2.1 МБ" },
+  { name: "Лицензия на производство ЖБИ", type: "PDF", size: "1.5 МБ" },
+  { name: "Паспорт качества на кольца КС 10.9", type: "PDF", size: "0.6 МБ" },
+  { name: "Протокол испытаний — плиты дорожные", type: "PDF", size: "0.9 МБ" },
+];
+
+const PROMOS = [
+  { badge: "АКЦИЯ", title: "Кольца КС 10.9 — скидка 15%", desc: "При заказе от 20 штук. Действует до конца месяца.", color: "#E62638" },
+  { badge: "ВЫГОДНО", title: "Плиты дорожные ПД-6 — оптовая цена", desc: "Партии от 50 плит по заводской себестоимости.", color: "#2D61A5" },
+  { badge: "БЕСПЛАТНО", title: "Бесплатная доставка при заказе от 200 000 ₽", desc: "В радиусе 100 км от завода. Уточняйте у менеджера.", color: "#1a8a4a" },
 ];
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState("home");
-  const [openDocId, setOpenDocId] = useState<number | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState<string | null>("Кольца и колодцы");
 
   const scrollTo = (id: string) => {
     setActiveSection(id);
@@ -118,89 +88,85 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen steel-bg text-foreground">
+    <div className="min-h-screen" style={{ background: "var(--bg-gray)", fontFamily: "Manrope, sans-serif" }}>
 
-      {/* TOP BAR */}
-      <div className="border-b border-border/50" style={{ background: 'hsl(220, 12%, 10%)' }}>
-        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-1.5">
-              <Icon name="Phone" size={12} className="orange-accent" />
-              +7 (800) 555-01-23
-            </span>
-            <span className="hidden sm:flex items-center gap-1.5">
-              <Icon name="Mail" size={12} className="orange-accent" />
-              info@stalprom.ru
-            </span>
+      {/* ── TOP BAR ── */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: "var(--blue)" }}>
+              <Icon name="Building2" size={22} className="text-white" />
+            </div>
+            <div>
+              <div className="font-extrabold text-base leading-none" style={{ color: "var(--blue)" }}>Завод ЖБИ</div>
+              <div className="text-xs font-medium" style={{ color: "var(--red)" }}>железобетонные изделия</div>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="hidden sm:block">Пн–Пт: 08:00–18:00</span>
-            <span className="flex items-center gap-1 text-orange-400 font-medium">
-              <Icon name="MapPin" size={12} />
-              Москва
-            </span>
+
+          {/* Address */}
+          <div className="hidden md:flex items-center gap-2 text-sm text-gray-500">
+            <Icon name="MapPin" size={14} style={{ color: "var(--red)" }} />
+            Смоленская обл., г. Сафоново, ул. Шахтёрская, 44
+          </div>
+
+          {/* Phone + CTA */}
+          <div className="flex items-center gap-3">
+            <div className="text-right">
+              <a href="tel:84814244902" className="block font-bold text-base leading-none hover:opacity-80 transition-opacity" style={{ color: "var(--blue)" }}>
+                8 (48142) 4-49-02
+              </a>
+              <a href="tel:89517159963" className="block text-sm font-medium" style={{ color: "var(--text-muted)" }}>
+                8 (951) 715-99-63
+              </a>
+            </div>
+            <button className="btn-red px-4 py-2.5 rounded-md text-sm flex items-center gap-2 whitespace-nowrap">
+              <Icon name="Download" size={15} />
+              Скачать прайс
+            </button>
           </div>
         </div>
       </div>
 
-      {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur-sm">
+      {/* ── NAVBAR ── */}
+      <nav className="sticky top-0 z-50 shadow-md" style={{ background: "var(--blue)" }}>
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <button onClick={() => scrollTo("home")} className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-primary flex items-center justify-center">
-                <Icon name="Factory" size={20} className="text-primary-foreground" />
-              </div>
-              <div className="text-left">
-                <div className="text-lg font-bold tracking-widest uppercase leading-none" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                  СтальПром
-                </div>
-                <div className="text-[10px] text-muted-foreground tracking-widest uppercase">
-                  промышленное оборудование
-                </div>
-              </div>
-            </button>
-
-            <div className="hidden lg:flex items-center gap-6">
+          <div className="flex items-center justify-between h-12">
+            <div className="hidden lg:flex items-center gap-7">
               {NAV_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
-                  className={`nav-link text-sm font-medium tracking-wide uppercase pb-1 transition-colors ${
-                    activeSection === item.id
-                      ? "text-primary active"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                  style={{ fontFamily: 'Oswald, sans-serif' }}
+                  className={`nav-item ${activeSection === item.id ? "active" : ""}`}
                 >
                   {item.label}
                 </button>
               ))}
             </div>
 
-            <div className="flex items-center gap-3">
-              <button className="hidden sm:block btn-orange px-4 py-2 text-sm rounded-sm">
-                Запрос прайса
-              </button>
-              <button
-                className="lg:hidden p-2 text-muted-foreground hover:text-foreground"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-                <Icon name={mobileMenuOpen ? "X" : "Menu"} size={22} />
-              </button>
+            <div className="hidden lg:flex items-center gap-2 text-white text-sm font-medium opacity-75">
+              <Icon name="Clock" size={14} />
+              Пн–Пт, 10:00–18:00
             </div>
+
+            {/* Mobile toggle */}
+            <button
+              className="lg:hidden text-white p-1.5"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <Icon name={mobileMenuOpen ? "X" : "Menu"} size={22} />
+            </button>
           </div>
         </div>
 
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-border bg-card">
-            <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-3">
+          <div className="lg:hidden border-t border-white/20" style={{ background: "var(--blue-dark)" }}>
+            <div className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
               {NAV_ITEMS.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => scrollTo(item.id)}
-                  className="text-left text-sm font-medium tracking-wide uppercase text-muted-foreground hover:text-primary py-2 border-b border-border/40"
-                  style={{ fontFamily: 'Oswald, sans-serif' }}
+                  className="text-left py-2.5 text-sm font-semibold text-white/85 hover:text-white border-b border-white/10 last:border-0"
                 >
                   {item.label}
                 </button>
@@ -210,456 +176,341 @@ export default function Index() {
         )}
       </nav>
 
-      {/* ===== HERO ===== */}
-      <section id="home" className="relative min-h-[90vh] flex items-center overflow-hidden">
+      {/* ── HERO ── */}
+      <section id="home" className="relative overflow-hidden" style={{ minHeight: 480 }}>
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${HERO_IMAGE})` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
-        <div className="absolute inset-0 grid-pattern opacity-20" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(30,74,130,0.88) 40%, rgba(30,74,130,0.45) 100%)" }} />
 
-        <div className="relative max-w-7xl mx-auto px-4 py-20 grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="inline-flex items-center gap-2 border border-primary/40 bg-primary/10 px-3 py-1.5 text-xs text-primary font-medium tracking-widest uppercase mb-6 animate-fade-in-delay-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              Оптовые поставки · Работаем с юрлицами
+        <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
+          <div className="max-w-xl">
+            <div className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded mb-4 anim-1" style={{ background: "var(--red)", color: "#fff" }}>
+              С 1998 года
             </div>
-
-            <h1
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[0.95] mb-6 animate-fade-in-delay-2"
-              style={{ fontFamily: 'Oswald, sans-serif' }}
-            >
-              ПРОМЫШЛЕННОЕ
-              <br />
-              <span className="text-primary">ОБОРУДОВАНИЕ</span>
-              <br />
-              ОПТОМ
+            <h1 className="text-white font-extrabold leading-tight mb-4 anim-2" style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)" }}>
+              Завод железобетонных<br />изделий — ЖБИ оптом
             </h1>
-
-            <p className="text-muted-foreground text-lg leading-relaxed mb-8 max-w-lg animate-fade-in-delay-3">
-              Трубопроводная арматура, металлопрокат и промышленные комплектующие.
-              Полная документация ГОСТ на каждую позицию. Отгрузка от 48 часов.
+            <p className="text-blue-100 text-base leading-relaxed mb-8 anim-3">
+              Производство и продажа ЖБИ: кольца, плиты, фундаментные блоки, дорожные плиты.
+              Полный пакет документов ГОСТ на каждую позицию. Отгрузка от 48 часов.
             </p>
-
-            <div className="flex flex-wrap gap-4 animate-fade-in-delay-4">
-              <button onClick={() => scrollTo("catalog")} className="btn-orange px-8 py-3.5 text-sm rounded-sm flex items-center gap-2">
-                Смотреть каталог
-                <Icon name="ArrowRight" size={16} />
+            <div className="flex flex-wrap gap-3 anim-4">
+              <button onClick={() => scrollTo("products")} className="btn-red px-7 py-3 rounded-md text-sm flex items-center gap-2">
+                Смотреть продукцию
+                <Icon name="ArrowRight" size={15} />
               </button>
-              <button onClick={() => scrollTo("price")} className="btn-outline-orange px-8 py-3.5 text-sm rounded-sm">
-                Скачать прайс
+              <button onClick={() => scrollTo("contacts")} className="px-7 py-3 rounded-md text-sm font-semibold border-2 border-white text-white hover:bg-white/10 transition-colors">
+                Получить прайс
               </button>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 animate-fade-in-delay-5">
-              {STATS.map((s, i) => (
-                <div key={i} className="border-l-2 border-primary pl-3">
-                  <div className="text-2xl font-bold text-foreground leading-none" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                    {s.value}
-                    {s.unit && <span className="text-sm text-primary ml-1">{s.unit}</span>}
-                  </div>
-                  <div className="text-xs text-muted-foreground mt-1 uppercase tracking-wide">{s.label}</div>
-                </div>
-              ))}
             </div>
           </div>
+        </div>
 
-          <div className="hidden lg:flex justify-end animate-fade-in-delay-3">
-            <div className="corner-mark p-8 steel-card w-72">
-              <div className="text-xs text-muted-foreground uppercase tracking-widest mb-4">Сертификации</div>
-              {["ISO 9001:2015", "ГОСТ Р", "ТР ТС 010/2011", "ТР ТС 032/2013", "РОСТЕхНАДЗОР"].map((cert) => (
-                <div key={cert} className="flex items-center gap-2 py-2 border-b border-border/40 last:border-0">
-                  <Icon name="ShieldCheck" size={14} className="text-primary" />
-                  <span className="text-sm font-medium">{cert}</span>
-                </div>
-              ))}
-            </div>
+        {/* Stats bar */}
+        <div className="relative" style={{ background: "rgba(20, 50, 100, 0.85)" }}>
+          <div className="max-w-7xl mx-auto px-4 py-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {STATS.map((s, i) => (
+              <div key={i} className="text-center text-white">
+                <div className="text-2xl font-extrabold leading-none" style={{ color: "#fff" }}>{s.value}</div>
+                <div className="text-xs text-blue-200 mt-0.5 font-medium">{s.label}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ===== CATALOG ===== */}
-      <section id="catalog" className="py-20 border-t border-border">
+      {/* ── PRODUCTS ── */}
+      <section id="products" className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
-            <div>
-              <div className="text-xs text-primary uppercase tracking-widest mb-2">// Номенклатура</div>
-              <h2 className="section-title text-4xl md:text-5xl font-bold text-foreground">
-                КАТАЛОГ<br /><span className="text-primary">ПРОДУКЦИИ</span>
-              </h2>
+          <div className="section-title mb-1">Продукция</div>
+          <div className="red-line" />
+          <p className="text-gray-500 text-sm mb-8 max-w-xl">
+            Собственное производство. Все изделия сертифицированы. Полный пакет ГОСТ-документов на каждую позицию.
+          </p>
+
+          <div className="flex flex-col lg:flex-row gap-5">
+            {/* Category sidebar */}
+            <div className="lg:w-64 shrink-0 flex lg:flex-col gap-2 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0">
+              {PRODUCT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.title}
+                  onClick={() => setOpenCategory(cat.title)}
+                  className={`flex items-center gap-2.5 px-4 py-3 rounded-lg text-sm font-semibold whitespace-nowrap lg:whitespace-normal transition-all text-left ${
+                    openCategory === cat.title
+                      ? "text-white shadow-md"
+                      : "bg-white text-gray-600 hover:bg-gray-50 border border-gray-200"
+                  }`}
+                  style={openCategory === cat.title ? { background: "var(--blue)" } : {}}
+                >
+                  <Icon name={cat.icon as "Circle"} size={16} />
+                  {cat.title}
+                </button>
+              ))}
             </div>
-            <p className="text-muted-foreground max-w-sm text-sm leading-relaxed">
-              Для каждой позиции доступны ГОСТ, сертификаты качества и полная техническая документация.
-            </p>
-          </div>
 
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
-            {CATALOG_ITEMS.map((item) => (
-              <div key={item.id} className="steel-card rounded-sm overflow-hidden hover:border-primary/40 transition-all duration-300">
-                <div className="p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <div className="text-xs text-muted-foreground uppercase tracking-widest mb-1">{item.category}</div>
-                      <h3 className="text-lg font-bold text-foreground leading-tight" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                        {item.name}
-                      </h3>
-                    </div>
-                    {item.badge && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-primary/15 text-primary border border-primary/30 whitespace-nowrap ml-2">
-                        {item.badge}
-                      </span>
-                    )}
+            {/* Items panel */}
+            <div className="flex-1 bg-white rounded-xl border border-gray-200 p-6">
+              {PRODUCT_CATEGORIES.filter((c) => c.title === openCategory).map((cat) => (
+                <div key={cat.title}>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Icon name={cat.icon as "Circle"} size={20} style={{ color: "var(--blue)" }} />
+                    <h3 className="font-bold text-lg">{cat.title}</h3>
                   </div>
-
-                  <div className="flex items-center gap-3 text-xs text-muted-foreground mb-4">
-                    <span className="font-mono bg-muted px-2 py-0.5">{item.article}</span>
-                    <span className="flex items-center gap-1 text-primary">
-                      <Icon name="FileText" size={11} />
-                      {item.gost}
-                    </span>
-                  </div>
-
-                  <div
-                    className="border-t border-border/50 pt-4 cursor-pointer"
-                    onClick={() => setOpenDocId(openDocId === item.id ? null : item.id)}
-                  >
-                    <div className="flex items-center justify-between text-xs font-medium uppercase tracking-wider">
-                      <span className="flex items-center gap-1.5 text-muted-foreground">
-                        <Icon name="FolderOpen" size={13} className="text-primary" />
-                        Документация ({item.docs.length})
-                      </span>
-                      <Icon name={openDocId === item.id ? "ChevronUp" : "ChevronDown"} size={14} className="text-primary" />
-                    </div>
-
-                    {openDocId === item.id && (
-                      <div className="mt-3 space-y-2 animate-fade-in">
-                        {item.docs.map((doc) => (
-                          <button
-                            key={doc}
-                            className="w-full flex items-center gap-2 text-xs py-2 px-3 bg-muted/50 hover:bg-primary/10 hover:text-primary text-muted-foreground transition-colors text-left rounded-sm"
-                          >
-                            <Icon name="Download" size={12} />
-                            {doc}
+                  <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+                    {cat.items.map((item) => (
+                      <div key={item} className="product-card p-4 flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-md flex items-center justify-center shrink-0 mt-0.5" style={{ background: "#eef3fb" }}>
+                          <Icon name="Box" size={15} style={{ color: "var(--blue)" }} />
+                        </div>
+                        <div>
+                          <div className="font-semibold text-sm leading-snug">{item}</div>
+                          <button className="text-xs font-semibold mt-1.5 hover:underline" style={{ color: "var(--red)" }}>
+                            Запросить цену →
                           </button>
-                        ))}
+                        </div>
                       </div>
-                    )}
+                    ))}
                   </div>
                 </div>
-
-                <div className="px-5 pb-4">
-                  <button className="w-full btn-outline-orange py-2.5 text-xs rounded-sm flex items-center justify-center gap-2">
-                    <Icon name="Send" size={13} />
-                    Запросить КП
-                  </button>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
-          <div className="mt-8 text-center">
-            <button className="btn-orange px-10 py-3.5 text-sm rounded-sm">
-              Полный каталог — 4 800+ позиций
+          <div className="mt-6 text-center">
+            <button className="btn-red px-10 py-3 rounded-md text-sm inline-flex items-center gap-2">
+              <Icon name="Download" size={15} />
+              Скачать полный прайс-лист
             </button>
           </div>
         </div>
       </section>
 
-      {/* ===== ABOUT ===== */}
-      <section id="about" className="py-20 border-t border-border bg-card/30">
+      {/* ── DOCUMENTS ── */}
+      <section id="docs" className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="section-title mb-1">Документы</div>
+          <div className="red-line" />
+          <p className="text-gray-500 text-sm mb-8 max-w-xl">
+            Вся продукция сертифицирована. Скачайте нужные документы или запросите по email.
+          </p>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {DOCS.map((doc, i) => (
+              <div key={i} className="flex items-center gap-4 p-4 rounded-lg border border-gray-200 bg-gray-50 hover:border-blue-300 hover:bg-blue-50/40 transition-all cursor-pointer group">
+                <div className="w-10 h-12 rounded flex items-center justify-center shrink-0 font-bold text-xs text-white" style={{ background: "var(--red)" }}>
+                  {doc.type}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-semibold text-sm leading-snug truncate">{doc.name}</div>
+                  <div className="text-xs text-gray-400 mt-0.5">{doc.size}</div>
+                </div>
+                <Icon name="Download" size={16} className="text-gray-400 group-hover:text-blue-600 transition-colors shrink-0" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SERVICES ── */}
+      <section id="services" className="py-14">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="section-title mb-1">Услуги</div>
+          <div className="red-line" />
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-2">
+            {SERVICES.map((s, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg hover:border-blue-200 transition-all">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4" style={{ background: "#eef3fb" }}>
+                  <Icon name={s.icon as "Truck"} size={22} style={{ color: "var(--blue)" }} />
+                </div>
+                <h3 className="font-bold text-base mb-2">{s.title}</h3>
+                <p className="text-sm text-gray-500 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ABOUT ── */}
+      <section id="about" className="py-14 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-14 items-center">
             <div>
-              <div className="text-xs text-primary uppercase tracking-widest mb-2">// О предприятии</div>
-              <h2 className="section-title text-4xl md:text-5xl font-bold mb-6">
-                23 ГОДА<br /><span className="text-primary">НАДЁЖНОСТИ</span>
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">
-                СтальПром — крупный оптовый поставщик промышленного оборудования и металлопроката для предприятий нефтегазовой, энергетической и строительной отраслей. С 2002 года мы обеспечиваем производства комплектующими с полным пакетом документации.
+              <div className="section-title mb-1">О заводе</div>
+              <div className="red-line" />
+              <p className="text-gray-600 leading-relaxed mb-5">
+                Завод ЖБИ работает с 1998 года. За это время мы выпустили более 500 наименований железобетонных изделий для промышленного и гражданского строительства, дорожного хозяйства и коммунальной инфраструктуры.
               </p>
-              <p className="text-muted-foreground leading-relaxed mb-8">
-                Собственный склад 12 000 м² в Москве, сертифицированная лаборатория входного контроля качества. Работаем только с проверенными производителями-резидентами России.
+              <p className="text-gray-600 leading-relaxed mb-6">
+                Производственная площадка оснащена современным оборудованием. Собственная лаборатория контролирует качество на каждом этапе: от замеса бетона до готового изделия. Всё производство соответствует ГОСТ и техническим регламентам Таможенного союза.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {[
-                  { icon: "Warehouse", text: "12 000 м² склада" },
-                  { icon: "FlaskConical", text: "Лаборатория контроля" },
-                  { icon: "Award", text: "ISO 9001:2015" },
-                  { icon: "Truck", text: "Собственный автопарк" },
+                  { icon: "Factory", label: "Своё производство" },
+                  { icon: "FlaskConical", label: "Лаборатория ОТК" },
+                  { icon: "Award", label: "ГОСТ сертификаты" },
+                  { icon: "Truck", label: "Собственный автопарк" },
                 ].map((f, i) => (
-                  <div key={i} className="flex items-center gap-3 border border-border/50 p-3 rounded-sm steel-card">
-                    <div className="w-8 h-8 bg-primary/15 flex items-center justify-center rounded-sm">
-                      <Icon name={f.icon} size={16} className="text-primary" />
+                  <div key={i} className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-gray-50">
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#eef3fb" }}>
+                      <Icon name={f.icon as "Factory"} size={17} style={{ color: "var(--blue)" }} />
                     </div>
-                    <span className="text-sm font-medium">{f.text}</span>
+                    <span className="text-sm font-semibold">{f.label}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="space-y-1">
-              {[
-                { year: "2002", event: "Основание компании, первые поставки арматуры" },
-                { year: "2007", event: "Открытие собственного склада, 3 000 позиций" },
-                { year: "2012", event: "Сертификация ISO 9001, выход на рынок СНГ" },
-                { year: "2017", event: "Запуск лаборатории входного контроля качества" },
-                { year: "2020", event: "Цифровой каталог с документацией онлайн" },
-                { year: "2024", event: "Расширение склада до 12 000 м², 4 800+ позиций" },
-              ].map((t, i) => (
-                <div key={i} className="flex gap-4 group">
-                  <div className="flex flex-col items-center">
-                    <div className="w-10 h-10 border-2 border-primary/30 group-hover:border-primary bg-background flex items-center justify-center transition-colors shrink-0">
-                      <span className="text-[10px] font-bold text-primary" style={{ fontFamily: 'Oswald, sans-serif' }}>{t.year}</span>
-                    </div>
-                    {i < 5 && <div className="w-px h-4 bg-border" />}
+            {/* Director block */}
+            <div className="space-y-5">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-white text-xl shrink-0" style={{ background: "var(--blue)" }}>
+                    АК
                   </div>
-                  <div className="pb-4 pt-2 text-sm text-muted-foreground leading-relaxed">
-                    {t.event}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== DELIVERY ===== */}
-      <section id="delivery" className="py-20 border-t border-border">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-xs text-primary uppercase tracking-widest mb-2">// Логистика</div>
-          <h2 className="section-title text-4xl md:text-5xl font-bold mb-12">
-            ДОСТАВКА<br /><span className="text-primary">И ОТГРУЗКА</span>
-          </h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-            {DELIVERY_ZONES.map((z, i) => (
-              <div key={i} className="steel-card p-5 rounded-sm hover:border-primary/40 transition-all">
-                <div className="w-10 h-10 bg-primary/15 flex items-center justify-center mb-4 rounded-sm">
-                  <Icon name="MapPin" size={18} className="text-primary" />
-                </div>
-                <h3 className="font-bold text-base mb-1" style={{ fontFamily: 'Oswald, sans-serif' }}>{z.name}</h3>
-                <div className="text-primary text-xl font-bold mb-1" style={{ fontFamily: 'Oswald, sans-serif' }}>{z.time}</div>
-                <div className="text-xs text-muted-foreground">{z.type}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 border-t border-border pt-12">
-            {[
-              {
-                icon: "PackageCheck",
-                title: "Контроль отгрузки",
-                text: "Каждая партия сопровождается паспортом качества и товарной накладной. Видеофиксация упаковки по запросу.",
-              },
-              {
-                icon: "Clock",
-                title: "Срок готовности",
-                text: "Стандарт — 48 часов после оплаты. Срочные заказы — от 24 часов для складских позиций.",
-              },
-              {
-                icon: "FileCheck",
-                title: "Полный пакет документов",
-                text: "Счёт, УПД, ТТН, сертификаты соответствия и паспорта качества — в электронном виде в день отгрузки.",
-              },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <div className="w-10 h-10 bg-primary/15 flex items-center justify-center shrink-0 rounded-sm">
-                  <Icon name={item.icon} size={18} className="text-primary" />
-                </div>
-                <div>
-                  <h4 className="font-bold mb-1" style={{ fontFamily: 'Oswald, sans-serif' }}>{item.title}</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== PRICE ===== */}
-      <section id="price" className="py-20 border-t border-border bg-card/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <div className="text-xs text-primary uppercase tracking-widest mb-2">// Прайс-листы</div>
-              <h2 className="section-title text-4xl md:text-5xl font-bold mb-6">
-                АКТУАЛЬНЫЕ<br /><span className="text-primary">ЦЕНЫ</span>
-              </h2>
-              <p className="text-muted-foreground leading-relaxed mb-8">
-                Прайс-листы обновляются еженедельно. Для получения актуальных цен и индивидуальных скидок при объёмных заказах — оставьте заявку или скачайте Excel.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <button className="btn-orange px-8 py-3.5 text-sm rounded-sm flex items-center gap-2">
-                  <Icon name="Download" size={15} />
-                  Скачать прайс (Excel)
-                </button>
-                <button className="btn-outline-orange px-8 py-3.5 text-sm rounded-sm">
-                  Запросить КП
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {[
-                { name: "Трубопроводная арматура", positions: "1 240 позиций", updated: "18 апр 2026" },
-                { name: "Металлопрокат", positions: "890 позиций", updated: "18 апр 2026" },
-                { name: "Насосы и компрессоры", positions: "640 позиций", updated: "14 апр 2026" },
-                { name: "Фланцы и соединения", positions: "520 позиций", updated: "14 апр 2026" },
-                { name: "Электрооборудование", positions: "410 позиций", updated: "07 апр 2026" },
-              ].map((p, i) => (
-                <div key={i} className="steel-card flex items-center justify-between p-4 rounded-sm hover:border-primary/40 transition-all group cursor-pointer">
                   <div>
-                    <div className="font-medium text-sm" style={{ fontFamily: 'Oswald, sans-serif' }}>{p.name}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">{p.positions} · обновлён {p.updated}</div>
-                  </div>
-                  <div className="flex items-center gap-2 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Icon name="Download" size={16} />
+                    <div className="font-bold text-base">Калинин Александр Сергеевич</div>
+                    <div className="text-sm text-gray-500">Директор завода</div>
                   </div>
                 </div>
-              ))}
+                <blockquote className="text-sm text-gray-600 leading-relaxed italic border-l-4 pl-4" style={{ borderColor: "var(--red)" }}>
+                  «Мы гарантируем качество каждого изделия, которое выходит с нашего завода. 25 лет работы — это тысячи реализованных проектов и сотни постоянных клиентов по всему региону.»
+                </blockquote>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {STATS.map((s, i) => (
+                  <div key={i} className="bg-white border border-gray-200 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-extrabold leading-none mb-1" style={{ color: "var(--red)" }}>{s.value}</div>
+                    <div className="text-xs text-gray-500 font-medium">{s.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===== BLOG ===== */}
-      <section id="blog" className="py-20 border-t border-border">
+      {/* ── PROMOS ── */}
+      <section id="promo" className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-xs text-primary uppercase tracking-widest mb-2">// База знаний</div>
-          <h2 className="section-title text-4xl md:text-5xl font-bold mb-12">
-            БЛОГ<br /><span className="text-primary">И СТАТЬИ</span>
-          </h2>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {BLOG_POSTS.map((post, i) => (
-              <article key={i} className="steel-card rounded-sm overflow-hidden cursor-pointer hover:border-primary/40 transition-all group">
-                <div className="diagonal-stripe h-2" />
+          <div className="section-title mb-1">Акции и спецпредложения</div>
+          <div className="red-line" />
+          <div className="grid md:grid-cols-3 gap-5 mt-2">
+            {PROMOS.map((p, i) => (
+              <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="h-2" style={{ background: p.color }} />
                 <div className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-xs text-muted-foreground">{post.date}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-primary/15 text-primary border border-primary/20">
-                      {post.tag}
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-base mb-3 leading-snug group-hover:text-primary transition-colors" style={{ fontFamily: 'Oswald, sans-serif' }}>
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{post.excerpt}</p>
-                  <div className="flex items-center gap-1 text-xs text-primary font-medium uppercase tracking-wider">
-                    Читать далее <Icon name="ArrowRight" size={12} />
-                  </div>
+                  <span className="inline-block text-xs font-bold text-white px-2.5 py-0.5 rounded mb-3" style={{ background: p.color }}>
+                    {p.badge}
+                  </span>
+                  <h3 className="font-bold text-base mb-2 leading-snug">{p.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed mb-4">{p.desc}</p>
+                  <button className="text-sm font-bold hover:underline" style={{ color: p.color }}>
+                    Узнать подробнее →
+                  </button>
                 </div>
-              </article>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ===== CONTACTS ===== */}
-      <section id="contacts" className="py-20 border-t border-border bg-card/30">
+      {/* ── CONTACTS ── */}
+      <section id="contacts" className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16">
-            <div>
-              <div className="text-xs text-primary uppercase tracking-widest mb-2">// Связаться</div>
-              <h2 className="section-title text-4xl md:text-5xl font-bold mb-6">
-                КОНТАКТЫ<br /><span className="text-primary">И РЕКВИЗИТЫ</span>
-              </h2>
+          <div className="section-title mb-1">Контакты</div>
+          <div className="red-line" />
 
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Info */}
+            <div>
               <div className="space-y-5 mb-8">
                 {[
-                  { icon: "Phone", label: "Телефон", value: "+7 (800) 555-01-23 (бесплатно)" },
-                  { icon: "Mail", label: "Email", value: "info@stalprom.ru" },
-                  { icon: "MapPin", label: "Адрес склада", value: "г. Москва, ул. Промышленная, 14с2" },
-                  { icon: "Clock", label: "Режим работы", value: "Пн–Пт: 08:00–18:00, Сб: 09:00–14:00" },
+                  { icon: "MapPin", label: "Адрес", value: "Смоленская обл., г. Сафоново, ул. Шахтёрская, 44, корп. 5" },
+                  { icon: "Phone", label: "Телефон", value: "8 (48142) 4-49-02" },
+                  { icon: "Smartphone", label: "Мобильный", value: "8 (951) 715-99-63" },
+                  { icon: "Mail", label: "Email", value: "9517159963@mail.ru" },
+                  { icon: "Clock", label: "Режим работы", value: "Пн–Пт, 10:00–18:00" },
                 ].map((c, i) => (
-                  <div key={i} className="flex gap-4 items-start">
-                    <div className="w-9 h-9 bg-primary/15 flex items-center justify-center shrink-0 rounded-sm">
-                      <Icon name={c.icon} size={16} className="text-primary" />
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ background: "#eef3fb" }}>
+                      <Icon name={c.icon as "MapPin"} size={17} style={{ color: "var(--blue)" }} />
                     </div>
                     <div>
-                      <div className="text-xs text-muted-foreground uppercase tracking-wider mb-0.5">{c.label}</div>
-                      <div className="font-medium">{c.value}</div>
+                      <div className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-0.5">{c.label}</div>
+                      <div className="font-semibold text-sm">{c.value}</div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="steel-card p-5 rounded-sm">
-                <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">Реквизиты</div>
-                {[
-                  ["ООО «СтальПром»", ""],
-                  ["ИНН", "7701234567"],
-                  ["ОГРН", "1027700001234"],
-                  ["р/с", "40702810000001234567"],
-                  ["Банк", "АО «Альфа-Банк», г. Москва"],
-                ].map(([label, val], i) => (
-                  <div key={i} className="flex justify-between text-sm py-1.5 border-b border-border/30 last:border-0">
-                    <span className="text-muted-foreground">{label}</span>
-                    <span className="font-medium text-right">{val}</span>
-                  </div>
-                ))}
+              {/* Map placeholder */}
+              <div className="w-full h-48 rounded-xl flex items-center justify-center border-2 border-dashed border-gray-300 bg-gray-50">
+                <div className="text-center text-gray-400">
+                  <Icon name="Map" size={32} className="mx-auto mb-2" />
+                  <div className="text-sm font-medium">Схема проезда на карте</div>
+                </div>
               </div>
             </div>
 
-            <div className="steel-card rounded-sm p-8">
-              <h3 className="section-title text-2xl font-bold mb-6">ОСТАВИТЬ ЗАЯВКУ</h3>
+            {/* Form */}
+            <div className="bg-gray-50 border border-gray-200 rounded-xl p-7">
+              <h3 className="font-bold text-lg mb-5">Оставить заявку</h3>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-muted-foreground uppercase tracking-wide block mb-1.5">Имя *</label>
-                    <input type="text" className="w-full bg-muted border border-border px-3 py-2.5 text-sm rounded-sm focus:border-primary focus:outline-none transition-colors" placeholder="Иван Петров" />
+                    <label className="text-xs text-gray-500 font-semibold block mb-1.5">Имя *</label>
+                    <input type="text" className="w-full bg-white border border-gray-300 px-3 py-2.5 text-sm rounded-lg focus:outline-none focus:border-blue-400 transition-colors" placeholder="Иван Петров" />
                   </div>
                   <div>
-                    <label className="text-xs text-muted-foreground uppercase tracking-wide block mb-1.5">Компания</label>
-                    <input type="text" className="w-full bg-muted border border-border px-3 py-2.5 text-sm rounded-sm focus:border-primary focus:outline-none transition-colors" placeholder="ООО Завод" />
+                    <label className="text-xs text-gray-500 font-semibold block mb-1.5">Компания</label>
+                    <input type="text" className="w-full bg-white border border-gray-300 px-3 py-2.5 text-sm rounded-lg focus:outline-none focus:border-blue-400 transition-colors" placeholder="ООО Стройка" />
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs text-muted-foreground uppercase tracking-wide block mb-1.5">Телефон *</label>
-                  <input type="tel" className="w-full bg-muted border border-border px-3 py-2.5 text-sm rounded-sm focus:border-primary focus:outline-none transition-colors" placeholder="+7 (___) ___-__-__" />
+                  <label className="text-xs text-gray-500 font-semibold block mb-1.5">Телефон *</label>
+                  <input type="tel" className="w-full bg-white border border-gray-300 px-3 py-2.5 text-sm rounded-lg focus:outline-none focus:border-blue-400 transition-colors" placeholder="+7 (___) ___-__-__" />
                 </div>
                 <div>
-                  <label className="text-xs text-muted-foreground uppercase tracking-wide block mb-1.5">Сообщение</label>
-                  <textarea rows={4} className="w-full bg-muted border border-border px-3 py-2.5 text-sm rounded-sm focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Опишите потребность или укажите артикул..." />
+                  <label className="text-xs text-gray-500 font-semibold block mb-1.5">Сообщение</label>
+                  <textarea rows={4} className="w-full bg-white border border-gray-300 px-3 py-2.5 text-sm rounded-lg focus:outline-none focus:border-blue-400 transition-colors resize-none" placeholder="Нужны кольца КС 10.9, 50 штук..." />
                 </div>
-                <button className="btn-orange w-full py-3.5 text-sm rounded-sm flex items-center justify-center gap-2">
+                <button className="btn-red w-full py-3 rounded-lg text-sm flex items-center justify-center gap-2">
                   <Icon name="Send" size={15} />
                   Отправить заявку
                 </button>
-                <p className="text-xs text-muted-foreground text-center">
-                  Ответим в течение 2 часов в рабочее время
-                </p>
+                <p className="text-xs text-gray-400 text-center">Ответим в течение 1 рабочего часа</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="border-t border-border bg-background py-10">
+      {/* ── FOOTER ── */}
+      <footer className="py-8" style={{ background: "#1a1f2e" }}>
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-5">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-primary flex items-center justify-center">
-                <Icon name="Factory" size={16} className="text-primary-foreground" />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "var(--blue)" }}>
+                <Icon name="Building2" size={16} className="text-white" />
               </div>
               <div>
-                <div className="font-bold tracking-widest uppercase text-sm" style={{ fontFamily: 'Oswald, sans-serif' }}>СтальПром</div>
-                <div className="text-[10px] text-muted-foreground">© 2002–2026</div>
+                <div className="text-white font-bold text-sm">Завод ЖБИ</div>
+                <div className="text-xs" style={{ color: "#969696" }}>© 1998–2026</div>
               </div>
             </div>
 
-            <div className="flex flex-wrap justify-center gap-6 text-xs text-muted-foreground">
+            <div className="flex flex-wrap justify-center gap-5">
               {NAV_ITEMS.map((item) => (
-                <button key={item.id} onClick={() => scrollTo(item.id)} className="hover:text-primary transition-colors uppercase tracking-wide" style={{ fontFamily: 'Oswald, sans-serif' }}>
+                <button key={item.id} onClick={() => scrollTo(item.id)} className="text-xs font-semibold hover:text-white transition-colors" style={{ color: "#e8e8e8" }}>
                   {item.label}
                 </button>
               ))}
             </div>
 
-            <div className="text-xs text-muted-foreground text-center md:text-right">
-              <div>ИНН 7701234567 · ОГРН 1027700001234</div>
+            <div className="text-xs text-center" style={{ color: "#969696" }}>
+              <div>8 (48142) 4-49-02</div>
               <div className="mt-1">Политика конфиденциальности</div>
             </div>
           </div>
