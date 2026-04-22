@@ -177,10 +177,13 @@ export default function Index() {
       </nav>
 
       {/* ── HERO ── */}
-      <section id="home" className="relative overflow-hidden" style={{ minHeight: 480 }}>
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+      <main>
+      <section id="home" aria-label="Главная — Завод ЖБИ" className="relative overflow-hidden" style={{ minHeight: 480 }}>
+        <img
+          src={HERO_IMAGE}
+          alt="Завод железобетонных изделий — производственная площадка"
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0" style={{ background: "linear-gradient(90deg, rgba(30,74,130,0.88) 40%, rgba(30,74,130,0.45) 100%)" }} />
 
@@ -222,12 +225,12 @@ export default function Index() {
       </section>
 
       {/* ── PRODUCTS ── */}
-      <section id="products" className="py-14">
+      <section id="products" aria-label="Каталог продукции ЖБИ" className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="section-title mb-1">Продукция</div>
+          <h2 className="section-title mb-1">Продукция ЖБИ — железобетонные изделия оптом</h2>
           <div className="red-line" />
           <p className="text-gray-500 text-sm mb-8 max-w-xl">
-            Собственное производство. Все изделия сертифицированы. Полный пакет ГОСТ-документов на каждую позицию.
+            Собственное производство. Все изделия сертифицированы по ГОСТ. Полный пакет документов на каждую позицию.
           </p>
 
           <div className="flex flex-col lg:flex-row gap-5">
@@ -288,9 +291,9 @@ export default function Index() {
       </section>
 
       {/* ── DOCUMENTS ── */}
-      <section id="docs" className="py-14 bg-white">
+      <section id="docs" aria-label="Документы и сертификаты" className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="section-title mb-1">Документы</div>
+          <h2 className="section-title mb-1">Сертификаты и документация</h2>
           <div className="red-line" />
           <p className="text-gray-500 text-sm mb-8 max-w-xl">
             Вся продукция сертифицирована. Скачайте нужные документы или запросите по email.
@@ -313,9 +316,9 @@ export default function Index() {
       </section>
 
       {/* ── SERVICES ── */}
-      <section id="services" className="py-14">
+      <section id="services" aria-label="Услуги завода" className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="section-title mb-1">Услуги</div>
+          <h2 className="section-title mb-1">Услуги завода ЖБИ</h2>
           <div className="red-line" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-2">
             {SERVICES.map((s, i) => (
@@ -332,11 +335,11 @@ export default function Index() {
       </section>
 
       {/* ── ABOUT ── */}
-      <section id="about" className="py-14 bg-white">
+      <section id="about" aria-label="О заводе ЖБИ" className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-14 items-center">
             <div>
-              <div className="section-title mb-1">О заводе</div>
+              <h2 className="section-title mb-1">О заводе ЖБИ в Сафоново</h2>
               <div className="red-line" />
               <p className="text-gray-600 leading-relaxed mb-5">
                 Завод ЖБИ работает с 1998 года. За это время мы выпустили более 500 наименований железобетонных изделий для промышленного и гражданского строительства, дорожного хозяйства и коммунальной инфраструктуры.
@@ -392,9 +395,9 @@ export default function Index() {
       </section>
 
       {/* ── PROMOS ── */}
-      <section id="promo" className="py-14">
+      <section id="promo" aria-label="Акции и скидки" className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="section-title mb-1">Акции и спецпредложения</div>
+          <h2 className="section-title mb-1">Акции и спецпредложения</h2>
           <div className="red-line" />
           <div className="grid md:grid-cols-3 gap-5 mt-2">
             {PROMOS.map((p, i) => (
@@ -417,9 +420,9 @@ export default function Index() {
       </section>
 
       {/* ── CONTACTS ── */}
-      <section id="contacts" className="py-14 bg-white">
+      <section id="contacts" aria-label="Контакты завода" className="py-14 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="section-title mb-1">Контакты</div>
+          <h2 className="section-title mb-1">Контакты завода ЖБИ</h2>
           <div className="red-line" />
 
           <div className="grid lg:grid-cols-2 gap-12">
@@ -487,8 +490,10 @@ export default function Index() {
         </div>
       </section>
 
+      </main>
+
       {/* ── FOOTER ── */}
-      <footer className="py-8" style={{ background: "#1a1f2e" }}>
+      <footer className="py-8" aria-label="Контакты и навигация" style={{ background: "#1a1f2e" }}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center justify-between gap-5">
             <div className="flex items-center gap-3">
